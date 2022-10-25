@@ -869,10 +869,10 @@ function Unit1Lesson2(finishedCallback) {
       './images/wall.png',
    ];
    var labels = [
-      'Karel',
-      'Beeper',
-      'World',
-      'Wall'
+      '카렐',
+      '비퍼',
+      '월드',
+      '월'
    ];
    return PictureLesson(buttonSrcs, labels, finishedCallback, false);
 }
@@ -885,10 +885,10 @@ function Unit1Lesson1(finishedCallback) {
       './images/wall.png',
    ];
    var labels = [
-      'Karel',
-      'Beeper',
-      'World',
-      'Wall'
+      '카렐',
+      '비퍼',
+      '월드',
+      '월'
    ];
    return PictureDemo(buttonSrcs, labels, finishedCallback, true);
 }

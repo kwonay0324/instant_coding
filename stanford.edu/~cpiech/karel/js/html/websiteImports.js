@@ -205,7 +205,7 @@ function importLearnEngine() {
 		'<script src="./js/learn/makeAbsoluteDiv.js"></script>',
 		'<script src="./js/learn/unitProgress.js"></script>',
 		'<script src="./js/learn/progressModel.js"></script>',
-		'<script src="./js/learn/lessonsModel.js"></script>',
+		'<script src="./js/learn/lessonsModel.js"  charset="UTF-8"></script>',
 		'<script src="./js/learn/homeScreen.js"></script>',
 		'<script src="./js/learn/textElement.js"></script>',
 		'<script src="./js/learn/textButton.js"></script>',
