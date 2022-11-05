@@ -32,7 +32,7 @@ def favicon():
 
 @application.route("/")
 def index():
-    return render_template("/lessons.html")
+    return render_template("/index.html")
 
 
 @application.route("/lessons.html")
