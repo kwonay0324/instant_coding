@@ -26,4 +26,3 @@
 - 해당 에러 발생 시, 진행 [Git: invalid path 'stanford.edu/~cpiech/karel/ace/index.html?C=D;O=A']
 > git reset  
 > git config core.protectNTFS false  
-> git origin/develop  
