@@ -345,6 +345,7 @@ body::after{bottom:-10%;right:-10%;width:65%;height:65%;background:radial-gradie
       <button class="btn-mic" id="mic-btn" onclick="toggleMic()" aria-label="마이크">
         <svg id="mic-svg" width="26" height="26" viewBox="0 0 24 24" fill="#00daf3"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
       </button>
+      <input type="file" id="audio-capture" accept="audio/*" capture="microphone" style="display:none" onchange="onAudioFile(this)"/>
     </div>
   </div>
   <p style="text-align:center;font-size:11px;color:var(--out);margin-top:10px;opacity:.6">눈은 도로에. 음성으로 대화하세요.</p>
@@ -592,16 +593,28 @@ function speakAI(txt){
 
 function setAiVis(on){document.getElementById('aiv').classList.toggle('on',on)}
 
-/* ---- 음성인식: Web Speech API 우선, 없으면 MediaRecorder+Gemini 변환 ---- */
+/* ---- 음성인식: Web Speech API 우선, iOS는 네이티브 파일 선택기+Gemini ---- */
 function startListen(){
   if(!active||isListen||isRecording||aiSpeak)return;
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(SR){
     startWebSpeech(SR);
   } else {
-    // iOS 등 Web Speech 미지원 → Gemini로 음성 변환
-    startGeminiRec();
+    // iOS: 네이티브 녹음 앱 열기
+    var inp=document.getElementById('audio-capture');
+    inp.value='';
+    inp.click();
+    setSt('녹음 후 완료 누르기',true);
+    setListen(true,'녹음 중...');
   }
+}
+
+function onAudioFile(input){
+  setListen(false);
+  if(!input.files||!input.files[0])return;
+  var file=input.files[0];
+  setSt('음성 변환 중...',true);
+  transcribeWithGemini(file,file.type||'audio/m4a');
 }
 
 function startWebSpeech(SR){
@@ -733,7 +746,12 @@ function stopListen(){
 
 function toggleMic(){
   if(isRecording){stopGeminiRec();return}
-  if(isListen){stopListen();return}
+  if(isListen){
+    // Web Speech 중이면 중지
+    if(recog)recog.stop();
+    isListen=false;setListen(false);
+    return;
+  }
   startListen();
 }
 
